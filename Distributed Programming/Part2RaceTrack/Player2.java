@@ -7,7 +7,7 @@ public class Player2 extends Players {
    double speed = 2;//improve speed
    double deceleration = -1.5;//improve speed
    boolean collisionStatus;
-   
+   boolean environCollisionStatus;
    public Player2(int x, int y) {
        super(x, y);
    }
@@ -23,11 +23,28 @@ public class Player2 extends Players {
       //icon2d.draw(getBounds());
    }
    
-   public Image getPlayer2Icon() {
-   
-     ImageIcon blueKartIcon = new ImageIcon("BlueKart/BFrame13.png");
-     return blueKartIcon.getImage();
+ public Image getPlayer2Icon() {
+    
+     ImageIcon currentIcon = new ImageIcon("BlueKart/BFrame13.png");
+    
+      if(velocityY == -speed){
+          ImageIcon blueKartIcon = new ImageIcon("BlueKart/BFrame1.png");
+          return blueKartIcon.getImage();
+          
+      } else if(velocityY == speed) { 
+          ImageIcon blueKartIcon = new ImageIcon("BlueKart/BFrame9.png");
+          return blueKartIcon.getImage();
+          
+      } else if(velocityX == -speed){
+         ImageIcon blueKartIcon = new ImageIcon("BlueKart/BFrame5.png");
+         return blueKartIcon.getImage();
+          
+      } else if(velocityX == speed) {
+         ImageIcon blueKartIcon = new ImageIcon("BlueKart/BFrame13.png");
+         return blueKartIcon.getImage();
+      }
      
+     return currentIcon.getImage();
    }
    
     public void keyPressed(KeyEvent e){
@@ -37,28 +54,28 @@ public class Player2 extends Players {
       if(key == KeyEvent.VK_UP){
       
         if(collisionStatus == true)
-         velocityY  -= -0.2;
+         velocityY    = velocityY + 3;
          else
          velocityY = -speed;
          
       } else if(key == KeyEvent.VK_DOWN){
       
          if(collisionStatus == true)
-         velocityY -= 0.2;
+         velocityY   = velocityY - 3;
          else
          velocityY = speed;
          
       } else if(key == KeyEvent.VK_LEFT){
          
          if(collisionStatus == true)
-         velocityX -= -0.2;
+         velocityX   = velocityY + 3;
          else
          velocityX = -speed;
          
       } else if(key == KeyEvent.VK_RIGHT){
       
          if(collisionStatus == true)
-         velocityX -= 0.2;
+         velocityX   = velocityY - 3;
          else
          velocityX = speed;
          
@@ -87,8 +104,22 @@ public class Player2 extends Players {
         return collisionStatus = false;
    }  
    
+     public boolean checkEnvironmentCollision(){
+     Rectangle outerEdge = RacingGame.getOuterEdge();
+     Rectangle innerEdge = RacingGame.getInnerEdge();
+     
+     if(getBounds().intersects(outerEdge.getBounds()) 
+     || getBounds().intersects(innerEdge.getBounds())) {
+     
+        return environCollisionStatus = true;
+     }
+        return environCollisionStatus = false;
+   }    
+      
+   
    public Rectangle getBounds() {
-      return new Rectangle(x, y + 10, getPlayer2Icon().getWidth(null), 30);
+   return new Rectangle(x, y, getPlayer2Icon().getWidth(null), getPlayer2Icon().getHeight(null));
+   //return new Rectangle(x, y + 10, getPlayer2Icon().getWidth(null), 30);
    }
    
 }

@@ -7,6 +7,7 @@ public class Player1 extends Players {
    double speed = 2;
    double deceleration = -0.5;//improve speed
    boolean collisionStatus;
+   boolean environCollisionStatus;
    
    public Player1(int x, int y) {
       super(x, y);
@@ -30,10 +31,27 @@ public class Player1 extends Players {
    }
    
    public Image getPlayer1Icon() {
-   
-      ImageIcon redKartIcon = new ImageIcon("RedKart/RFrame13.png");
-      return redKartIcon.getImage();
+    
+     ImageIcon currentIcon = new ImageIcon("RedKart/RFrame13.png");
+    
+      if(velocityY == -speed){
+          ImageIcon redKartIcon = new ImageIcon("RedKart/RFrame1.png");
+          return redKartIcon.getImage();
+          
+      } else if(velocityY == speed) { 
+          ImageIcon redKartIcon = new ImageIcon("RedKart/RFrame9.png");
+          return redKartIcon.getImage();
+          
+      } else if(velocityX == -speed){
+         ImageIcon redKartIcon = new ImageIcon("RedKart/RFrame5.png");
+         return redKartIcon.getImage();
+          
+      } else if(velocityX == speed) {
+         ImageIcon redKartIcon = new ImageIcon("RedKart/RFrame13.png");
+         return redKartIcon.getImage();
+      }
      
+     return currentIcon.getImage();
    }
   
    public void keyPressed(KeyEvent e){
@@ -44,28 +62,28 @@ public class Player1 extends Players {
       if(key == KeyEvent.VK_W){
       
         if(collisionStatus == true)
-         velocityY  = 1;
+         velocityY  = velocityY + 3;
          else
          velocityY = -speed;
          
       } else if(key == KeyEvent.VK_S){
       
          if(collisionStatus == true)
-         velocityY = 1;
+         velocityY = velocityY - 3;
          else
          velocityY = speed;
          
       } else if(key == KeyEvent.VK_A){
          
          if(collisionStatus == true)
-         velocityX = 1;
+         velocityX = velocityY + 3;
          else
          velocityX = -speed;
          
       } else if(key == KeyEvent.VK_D){
       
          if(collisionStatus == true)
-         velocityX = 1;
+         velocityX = velocityY - 3;
          else
          velocityX = speed;
          
@@ -92,9 +110,22 @@ public class Player1 extends Players {
         return collisionStatus = true;
      }
         return collisionStatus = false;
+   } 
+   
+    public boolean checkEnvironmentCollision(){
+     Rectangle outerEdge = RacingGame.getOuterEdge();
+     Rectangle innerEdge = RacingGame.getInnerEdge();
+     
+     if(getBounds().intersects(outerEdge.getBounds()) 
+     || getBounds().intersects(innerEdge.getBounds())) {
+     
+        return environCollisionStatus = true;
+     }
+        return environCollisionStatus = false;
    }    
+      
    
    public Rectangle getBounds(){
-      return new Rectangle(x, y + 10, getPlayer1Icon().getWidth(null), 30);//collision
+      return new Rectangle(x, y, getPlayer1Icon().getWidth(null), getPlayer1Icon().getHeight(null));//collision
    }
 }

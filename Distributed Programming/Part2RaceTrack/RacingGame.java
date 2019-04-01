@@ -1,13 +1,17 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-
+import java.awt.geom.Line2D;
 public class RacingGame extends JPanel implements ActionListener{
 
   Timer racingGameTimer;
   static Player1 player1;
   static Player2 player2;
- // static boolean collision = false;
+  
+  static Rectangle OuterEdge;
+  static Rectangle InnerEdge;
+  
+  static Line2D  StartLine;
   
  public RacingGame(){
  
@@ -29,24 +33,33 @@ public class RacingGame extends JPanel implements ActionListener{
 	 super.paintComponent(g);
     Graphics2D g2 = (Graphics2D) g;
   
-    
-    Color c1 = Color.green; // set these as rectangles
-    g.setColor( c1 );
-    g.fillRect( 150, 200, 550, 300 ); // grass
-    
+   
     Color c2 = Color.black;
+    OuterEdge = new Rectangle( 50, 100, 750, 500); // Outer edge
     g.setColor( c2 );
-    g.drawRect(50, 100, 750, 500);  // outer edge
-    g.drawRect(150, 200, 550, 300); // inner edge
+    g2.draw(OuterEdge);
+    g.setColor( Color.gray );
+    g.fillRect( 50, 100, 750, 500 ); 
     
-    Color c3 = Color.yellow;
-    g.setColor( c3 );
-    g.drawRect( 100, 150, 650, 400 ); // mid-lane marker
+    InnerEdge = new Rectangle( 150, 200, 550, 300); // Inner edge INCREASE THEN ADD COLLISIONS
+    g.setColor( c2 );
+    g2.draw(InnerEdge);
     
-    Color c4 = Color.white;
-    g2.setColor( c4 );
+    Rectangle Grass = new Rectangle( 150, 200, 550, 300); //Grass
+    g.setColor( Color.green );
+    g.fillRect( 150, 200, 550, 300 ); // grass
+    g2.draw(Grass);
+    
+    
+    g.setColor( Color.yellow );
+    g.drawRect( 100, 150, 650, 400 ); // Mid-lane marker INCREASE
+    
+    StartLine = new Line2D.Double (425, 500, 425, 600); //Start line
+    g2.setColor( Color.white );
     //g2.setStroke(new BasicStroke(10));
-    g2.drawLine( 425, 500, 425, 600 ); // start line
+    g2.draw(StartLine);
+    
+    //g2.drawLine( 425, 500, 425, 600 ); // start line INCREASE AND SET LAP
      
     player1.draw(g2);
     player2.draw(g2);
@@ -63,26 +76,14 @@ public class RacingGame extends JPanel implements ActionListener{
     //collision();
     player1.checkCollision();
     player2.checkCollision();
+    
+    player1.checkEnvironmentCollision();
+    player2.checkEnvironmentCollision();
+    
 	 repaint(); //repaint window every 10 milliseconds
  }
  
- //public void collision(){
-    
-   //Rectangle player1Bounds = player1.getBounds();
-   //Rectangle player2Bounds = player2.getBounds();
-    
-    //if (player1Bounds.intersects(player2Bounds)) {
-    //collision = true;
-    //}
-    //else {
-    //collision = false;
-    //}
-       
- //}
- 
- //public static boolean getCollisionStatus(){
-   // return collision;
- //}
+
  
  public static Player1 getPlayer1(){
     return player1;
@@ -90,6 +91,14 @@ public class RacingGame extends JPanel implements ActionListener{
  
  public static Player2 getPlayer2(){
     return player2;
+ }
+ 
+ public static Rectangle getOuterEdge(){
+     return new Rectangle(50, 100, 750, 500);
+ }
+ 
+ public static Rectangle getInnerEdge(){
+    return new Rectangle(150, 200, 550, 300);
  }
  
 }
